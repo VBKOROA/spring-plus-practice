@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDate;
 
-import org.example.expert.domain.common.annotation.Auth;
 import org.example.expert.domain.common.dto.AuthUser;
 import org.example.expert.domain.todo.dto.command.GetTodosCommand;
 import org.example.expert.domain.todo.dto.request.TodoSaveRequest;
@@ -15,6 +14,7 @@ import org.example.expert.domain.todo.service.TodoService;
 import org.springframework.data.domain.Page;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -25,9 +25,8 @@ public class TodoController {
 
     @PostMapping("/todos")
     public ResponseEntity<TodoSaveResponse> saveTodo(
-            @Auth AuthUser authUser,
-            @Valid @RequestBody TodoSaveRequest todoSaveRequest
-    ) {
+            @AuthenticationPrincipal AuthUser authUser,
+            @Valid @RequestBody TodoSaveRequest todoSaveRequest) {
         return ResponseEntity.ok(todoService.saveTodo(authUser, todoSaveRequest));
     }
 
@@ -36,18 +35,15 @@ public class TodoController {
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(required = false) String weather,
-            @RequestParam(required = false)
-            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
-            @RequestParam(required = false)
-            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate
-    ) {
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
         GetTodosCommand getTodosCommand = GetTodosCommand.builder()
-            .page(page)
-            .size(size)
-            .weather(weather)
-            .startDate(startDate)
-            .endDate(endDate)
-            .build();
+                .page(page)
+                .size(size)
+                .weather(weather)
+                .startDate(startDate)
+                .endDate(endDate)
+                .build();
         return ResponseEntity.ok(todoService.getTodos(getTodosCommand));
     }
 

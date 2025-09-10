@@ -48,6 +48,9 @@ dependencies {
     implementation "io.github.openfeign.querydsl:querydsl-jpa:${querydslVersion}"
     implementation "io.github.openfeign.querydsl:querydsl-core:${querydslVersion}"
     annotationProcessor "io.github.openfeign.querydsl:querydsl-apt:${querydslVersion}:jpa"
+
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    testImplementation 'org.springframework.security:spring-security-test'
 }
 
 sourceSets {

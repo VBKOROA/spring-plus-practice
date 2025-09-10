@@ -1,23 +1,17 @@
 meta {
-  name: Todo의 Comment 목록 조회
+  name: Todo 조회
   type: http
-  seq: 4
+  seq: 3
 }
 
 get {
-  url: {{baseUrl}}/todos/{{todoId}}/comments
+  url: {{baseUrl}}/todos/{{todoId}}
   body: none
   auth: inherit
 }
 
 headers {
   Authorization: {{bearer}}
-}
-
-body:json {
-  {
-    "contents": "content"
-  }
 }
 
 vars:pre-request {

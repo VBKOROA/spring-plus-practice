@@ -1,11 +1,11 @@
 meta {
-  name: 권한 변경
+  name: todo 생성
   type: http
   seq: 2
 }
 
-patch {
-  url: {{baseUrl}}/admin/users/{{userId}}
+post {
+  url: {{baseUrl}}/todos
   body: json
   auth: inherit
 }
@@ -16,12 +16,9 @@ headers {
 
 body:json {
   {
-    "role": "ADMIN"
+    "title": "title",
+    "contents": "contents"
   }
-}
-
-vars:pre-request {
-  userId: 1
 }
 
 settings {

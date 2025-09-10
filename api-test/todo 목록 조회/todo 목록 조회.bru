@@ -1,0 +1,25 @@
+meta {
+  name: todo 목록 조회
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/todos?weather=and
+  body: none
+  auth: inherit
+}
+
+params:query {
+  weather: and
+  ~startDate: 2025-09-11
+  ~endDate: 2025-09-11
+}
+
+headers {
+  Authorization: {{bearer}}
+}
+
+settings {
+  encodeUrl: true
+}

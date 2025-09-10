@@ -1,0 +1,26 @@
+meta {
+  name: todo 생성
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/todos
+  body: json
+  auth: inherit
+}
+
+headers {
+  Authorization: {{bearer}}
+}
+
+body:json {
+  {
+    "title": "title",
+    "contents": "contents"
+  }
+}
+
+settings {
+  encodeUrl: true
+}

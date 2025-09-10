@@ -1,0 +1,29 @@
+meta {
+  name: Todo의 Comment 목록 조회
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{baseUrl}}/todos/{{todoId}}/comments
+  body: json
+  auth: inherit
+}
+
+headers {
+  Authorization: {{bearer}}
+}
+
+body:json {
+  {
+    "contents": "content"
+  }
+}
+
+vars:pre-request {
+  todoId: 1
+}
+
+settings {
+  encodeUrl: true
+}

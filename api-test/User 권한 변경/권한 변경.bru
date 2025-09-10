@@ -1,0 +1,23 @@
+meta {
+  name: 권한 변경
+  type: http
+  seq: 2
+}
+
+patch {
+  url: {{baseUrl}}/admin/users/{{userId}}
+  body: none
+  auth: inherit
+}
+
+headers {
+  Authorization: {{bearer}}
+}
+
+vars:pre-request {
+  userId: 1
+}
+
+settings {
+  encodeUrl: true
+}

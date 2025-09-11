@@ -1,0 +1,30 @@
+meta {
+  name: Manager 등록
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/todos/{{todoId}}/managers
+  body: json
+  auth: inherit
+}
+
+headers {
+  Authorization: {{bearer}}
+}
+
+body:json {
+  {
+    "managerUserId": {{managerUserId}}
+  }
+}
+
+vars:pre-request {
+  todoId: 1
+  managerUserId: 4
+}
+
+settings {
+  encodeUrl: true
+}

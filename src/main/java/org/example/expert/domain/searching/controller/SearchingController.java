@@ -20,8 +20,9 @@ public class SearchingController {
     private final SearchingMapper searchingMapper;
 
     @PostMapping("/todos/search")
-    public ResponseEntity<Page<SearchTodoResponse>> search(@RequestBody SearchTodoRequest request) {
-        SearchTodoCommand command = searchingMapper.toSearchTodoCommand(request);
+    public ResponseEntity<Page<SearchTodoResponse>> search(@RequestBody(required = false) SearchTodoRequest request) {
+        SearchTodoRequest safeRequest = request == null ? SearchTodoRequest.allNull() : request;
+        SearchTodoCommand command = searchingMapper.toSearchTodoCommand(safeRequest);
         Page<TodoSummaryProjection> result = searchingService.searchTodos(command);
         Page<SearchTodoResponse> response = result.map(searchingMapper::toSearchTodoResponse);
         return ResponseEntity.ok().body(response);

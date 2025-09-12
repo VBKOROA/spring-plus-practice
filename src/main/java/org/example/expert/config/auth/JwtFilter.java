@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.example.expert.domain.common.dto.AuthUser;
 import org.example.expert.domain.user.enums.UserRole;
+import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -55,6 +56,8 @@ public class JwtFilter extends OncePerRequestFilter {
             Authentication token = new UsernamePasswordAuthenticationToken(authUser, null, authorities);
 
             SecurityContextHolder.getContext().setAuthentication(token);
+        } catch (Exception ignore) {
+            // ignored
         } finally {
             filterChain.doFilter(request, response);
         }

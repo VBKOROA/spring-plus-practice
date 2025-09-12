@@ -33,6 +33,7 @@ public class SecurityConfig {
                         request -> request.requestMatchers("/admin/**").hasAuthority(UserRole.ADMIN.name())
                                 .requestMatchers("/auth/**").permitAll()
                                 .requestMatchers("/error").permitAll()
+                                .requestMatchers("/actuator/**").permitAll()
                                 .anyRequest().authenticated())
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling(handler -> handler

@@ -39,7 +39,7 @@ public class ProfileStoreS3Service implements ProfileStoreService {
         String safeFileName = StringUtils.cleanPath(profile.getOriginalFilename());
         String storeFileName = UUID.randomUUID().toString() + "-" + safeFileName;
 
-        if (!profileValidator.validate(profile)) {
+        if (!profileValidator.isValid(profile)) {
             throw new InvalidRequestException("이미지 파일이 아닙니다.");
         }
 

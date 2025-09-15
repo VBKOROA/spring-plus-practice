@@ -5,7 +5,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Component
 public class ProfileValidator {
-    public boolean validate(MultipartFile proifle) {
+    public boolean isValid(MultipartFile proifle) {
         return proifle.getContentType().startsWith("image/");
     }
 }

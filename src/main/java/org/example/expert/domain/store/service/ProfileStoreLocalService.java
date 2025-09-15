@@ -43,7 +43,7 @@ public class ProfileStoreLocalService implements ProfileStoreService {
         String safeFileName = StringUtils.cleanPath(profile.getOriginalFilename());
         String storeFileName = UUID.randomUUID().toString() + "-" + safeFileName;
 
-        if (profileValidator.validate(profile) == false) {
+        if (profileValidator.isValid(profile) == false) {
             throw new InvalidRequestException("이미지 파일이 아닙니다.");
         }
 

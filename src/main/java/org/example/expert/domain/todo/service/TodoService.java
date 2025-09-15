@@ -50,7 +50,7 @@ public class TodoService {
 				savedTodo.getTitle(),
 				savedTodo.getContents(),
 				weather,
-				new UserResponse(user.getId(), user.getEmail(), user.getProfile()));
+				new UserResponse(authUser.getId(), authUser.getEmail(), authUser.getProfile()));
 	}
 
 	public Page<TodoResponse> getTodos(GetTodosCommand getTodosCommand) {

@@ -1,0 +1,27 @@
+meta {
+  name: 프로필 변경
+  type: http
+  seq: 1
+}
+
+put {
+  url: {{baseUrl}}/users/profile
+  body: multipartForm
+  auth: inherit
+}
+
+params:query {
+  : 
+}
+
+headers {
+  Authorization: {{bearer}}
+}
+
+body:multipart-form {
+  profile: @file(C:\Users\hex69\Downloads\218528746.jpg)
+}
+
+settings {
+  encodeUrl: true
+}

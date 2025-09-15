@@ -9,7 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.example.expert.domain.common.dto.AuthUser;
 import org.example.expert.domain.user.enums.UserRole;
-import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -49,10 +48,11 @@ public class JwtFilter extends OncePerRequestFilter {
 
             long userId = Long.parseLong(claims.getSubject());
             String email = claims.get("email", String.class);
+            String profile = claims.get("profile", String.class);
             String userRoleString = claims.get("userRole", String.class);
             UserRole userRole = UserRole.of(userRoleString);
             List<GrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority(userRole.name()));
-            AuthUser authUser = new AuthUser(userId, email, userRole);
+            AuthUser authUser = new AuthUser(userId, email, profile, userRole);
             Authentication token = new UsernamePasswordAuthenticationToken(authUser, null, authorities);
 
             SecurityContextHolder.getContext().setAuthentication(token);

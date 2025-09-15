@@ -55,6 +55,10 @@ public class User extends Timestamped {
         this.password = password;
     }
 
+    public void changeProfile(String profile) {
+        this.profile = profile;
+    }
+
     public void updateRole(UserRole userRole) {
         this.userRole = userRole;
     }

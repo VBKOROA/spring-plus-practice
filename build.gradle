@@ -31,6 +31,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'io.awspring.cloud:spring-cloud-aws-starter-s3'
     testImplementation 'org.springframework.security:spring-security-test'
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'com.h2database:h2'
@@ -51,6 +52,12 @@ dependencies {
     implementation "io.github.openfeign.querydsl:querydsl-jpa:${querydslVersion}"
     implementation "io.github.openfeign.querydsl:querydsl-core:${querydslVersion}"
     annotationProcessor "io.github.openfeign.querydsl:querydsl-apt:${querydslVersion}:jpa"
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "io.awspring.cloud:spring-cloud-aws-dependencies:3.4.0" // 최신 버전 확인 권장
+    }
 }
 
 sourceSets {

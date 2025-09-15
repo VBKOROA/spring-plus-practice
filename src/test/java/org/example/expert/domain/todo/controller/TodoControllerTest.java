@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
@@ -31,13 +32,14 @@ class TodoControllerTest {
     private TodoService todoService;
 
     @Test
+    @WithMockUser
     void todo_단건_조회에_성공한다() throws Exception {
         // given
         long todoId = 1L;
         String title = "title";
         AuthUser authUser = new AuthUser(1L, "email", UserRole.USER);
         User user = User.fromAuthUser(authUser);
-        UserResponse userResponse = new UserResponse(user.getId(), user.getEmail());
+        UserResponse userResponse = new UserResponse(user.getId(), user.getEmail(), null);
         TodoResponse response = new TodoResponse(
                 todoId,
                 title,
@@ -59,6 +61,7 @@ class TodoControllerTest {
     }
 
     @Test
+    @WithMockUser
     void todo_단건_조회_시_todo가_존재하지_않아_예외가_발생한다() throws Exception {
         // given
         long todoId = 1L;

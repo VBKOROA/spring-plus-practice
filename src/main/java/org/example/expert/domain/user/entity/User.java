@@ -20,6 +20,8 @@ public class User extends Timestamped {
     @Column(nullable = false)
     private String nickname;
     private String password;
+    // 프로필 이미지 경로를 저장함
+    private String profile;
     @Enumerated(EnumType.STRING)
     private UserRole userRole;
 
@@ -28,6 +30,15 @@ public class User extends Timestamped {
         this.nickname = nickname;
         this.password = password;
         this.userRole = userRole;
+        profile = null;
+    }
+
+    public User(String email, String nickname, String password, UserRole userRole, String profile) {
+        this.email = email;
+        this.nickname = nickname;
+        this.password = password;
+        this.userRole = userRole;
+        this.profile = profile;
     }
 
     private User(Long id, String email, UserRole userRole) {

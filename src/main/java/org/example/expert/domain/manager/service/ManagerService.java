@@ -52,7 +52,7 @@ public class ManagerService {
 
         return new ManagerSaveResponse(
                 savedManagerUser.getId(),
-                new UserResponse(managerUser.getId(), managerUser.getEmail())
+                new UserResponse(managerUser.getId(), managerUser.getEmail(), managerUser.getProfile())
         );
     }
 
@@ -67,7 +67,7 @@ public class ManagerService {
             User user = manager.getUser();
             dtoList.add(new ManagerResponse(
                     manager.getId(),
-                    new UserResponse(user.getId(), user.getEmail())
+                    new UserResponse(user.getId(), user.getEmail(), user.getProfile())
             ));
         }
         return dtoList;

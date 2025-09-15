@@ -27,7 +27,7 @@ public class TodoQueryRepository {
                 todo.title,
                 todo.contents,
                 todo.weather,
-                Projections.constructor(SimpleUserProjection.class, author.id, author.email),
+                Projections.constructor(SimpleUserProjection.class, author.id, author.email, author.profile),
                 todo.createdAt,
                 todo.modifiedAt))
                 .from(todo)

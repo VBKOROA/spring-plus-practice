@@ -1,7 +1,7 @@
 meta {
-  name: 회원가입
+  name: 회원가입(사진 유)
   type: http
-  seq: 1
+  seq: 2
 }
 
 post {
@@ -13,12 +13,13 @@ post {
 body:multipart-form {
   signupInfo: '''
     {
-      "email": "abko@abko.com",
+      "email": "abko2@abko.com",
       "password": "password",
       "nickname": "abko",
       "userRole": "USER"
     }
   ''' @contentType(application/json)
+  profile: @file(C:\Users\hex69\Downloads\157783368.png)
 }
 
 settings {

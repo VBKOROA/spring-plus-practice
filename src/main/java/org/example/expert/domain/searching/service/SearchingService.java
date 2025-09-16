@@ -4,6 +4,7 @@ import org.example.expert.domain.searching.mapper.SearchingMapper;
 import org.example.expert.domain.searching.repository.SearchTodoQuery;
 import org.example.expert.domain.searching.repository.SearchingRepository;
 import org.example.expert.domain.searching.repository.TodoSummaryProjection;
+import org.example.expert.domain.searching.repository.UserSummaryProjection;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
@@ -18,5 +19,9 @@ public class SearchingService {
     public Page<TodoSummaryProjection> searchTodos(SearchTodoCommand command) {
         SearchTodoQuery query = searchingMapper.toSearchTodoQuery(command);
         return searchingRepository.searchTodos(query);
+    }
+
+    public Page<UserSummaryProjection> searchUsers(SearchUserCommand command) {
+        return searchingRepository.searchUsers(command.nickname(), command.pageable());
     }
 }

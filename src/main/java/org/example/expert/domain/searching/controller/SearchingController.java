@@ -2,7 +2,9 @@ package org.example.expert.domain.searching.controller;
 
 import org.example.expert.domain.searching.mapper.SearchingMapper;
 import org.example.expert.domain.searching.repository.TodoSummaryProjection;
+import org.example.expert.domain.searching.repository.UserSummaryProjection;
 import org.example.expert.domain.searching.service.SearchTodoCommand;
+import org.example.expert.domain.searching.service.SearchUserCommand;
 import org.example.expert.domain.searching.service.SearchingService;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -20,11 +22,18 @@ public class SearchingController {
     private final SearchingMapper searchingMapper;
 
     @PostMapping("/todos/search")
-    public ResponseEntity<Page<SearchTodoResponse>> search(@RequestBody(required = false) SearchTodoRequest request) {
-        SearchTodoRequest safeRequest = request == null ? SearchTodoRequest.allNull() : request;
-        SearchTodoCommand command = searchingMapper.toSearchTodoCommand(safeRequest);
+    public ResponseEntity<Page<SearchTodoResponse>> search(@RequestBody SearchTodoRequest request) {
+        SearchTodoCommand command = searchingMapper.toSearchTodoCommand(request);
         Page<TodoSummaryProjection> result = searchingService.searchTodos(command);
         Page<SearchTodoResponse> response = result.map(searchingMapper::toSearchTodoResponse);
+        return ResponseEntity.ok().body(response);
+    }
+
+    @PostMapping("/users/search")
+    public ResponseEntity<Page<SearchUserResponse>> search(@RequestBody SearchUserRequest request) {
+        SearchUserCommand command = searchingMapper.toSearchUserCommand(request);
+        Page<UserSummaryProjection> result = searchingService.searchUsers(command);
+        Page<SearchUserResponse> response = result.map(searchingMapper::toSearchUserResponse);
         return ResponseEntity.ok().body(response);
     }
 }

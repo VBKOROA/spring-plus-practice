@@ -34,6 +34,7 @@ public class SecurityConfig {
                                 .requestMatchers("/auth/**").permitAll()
                                 .requestMatchers("/error").permitAll()
                                 .requestMatchers("/actuator/**").permitAll()
+                                .requestMatchers("/batches/**").permitAll()
                                 .anyRequest().authenticated())
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling(handler -> handler

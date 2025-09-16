@@ -1,0 +1,25 @@
+meta {
+  name: user 검색
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/users/search
+  body: json
+  auth: inherit
+}
+
+headers {
+  Authorization: {{bearer}}
+}
+
+body:json {
+  {
+    "nickname": "o"
+  }
+}
+
+settings {
+  encodeUrl: true
+}

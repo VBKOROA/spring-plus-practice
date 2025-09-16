@@ -20,7 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
-@Profile({ "dev" })
+@Profile({ "dev", "batch" })
 public class ProfileStoreLocalService implements ProfileStoreService {
     private final Path storeLocation;
     private final ProfileValidator profileValidator;

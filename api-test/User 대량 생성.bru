@@ -1,0 +1,15 @@
+meta {
+  name: User 대량 생성
+  type: http
+  seq: 10
+}
+
+post {
+  url: {{baseUrl}}/batches/insert-many-user
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+}

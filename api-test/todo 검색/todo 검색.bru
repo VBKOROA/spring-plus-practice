@@ -1,11 +1,11 @@
 meta {
-  name: todo 생성
+  name: todo 검색
   type: http
-  seq: 2
+  seq: 1
 }
 
 post {
-  url: {{baseUrl}}/todos
+  url: {{baseUrl}}/todos/search
   body: json
   auth: inherit
 }
@@ -16,8 +16,7 @@ headers {
 
 body:json {
   {
-    "title": "fdsfaohlti",
-    "contents": "contents"
+    "title": "o"
   }
 }
 

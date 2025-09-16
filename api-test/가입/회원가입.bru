@@ -1,13 +1,17 @@
 meta {
   name: 회원가입
   type: http
-  seq: 1
+  seq: 2
 }
 
 post {
   url: {{baseUrl}}/auth/signup
   body: multipartForm
   auth: inherit
+}
+
+body:form-urlencoded {
+  : 
 }
 
 body:multipart-form {
@@ -18,7 +22,7 @@ body:multipart-form {
       "nickname": "abko",
       "userRole": "USER"
     }
-  ''' @contentType(application/json)
+  '''
 }
 
 settings {

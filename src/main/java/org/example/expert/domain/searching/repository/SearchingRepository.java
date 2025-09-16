@@ -7,7 +7,6 @@ import java.util.List;
 import org.example.expert.domain.comment.entity.QComment;
 import org.example.expert.domain.manager.entity.QManager;
 import org.example.expert.domain.todo.entity.QTodo;
-import org.example.expert.domain.user.entity.QUser;
 import org.springframework.data.domain.Page;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
@@ -16,6 +15,7 @@ import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
@@ -27,23 +27,26 @@ public class SearchingRepository {
     private final JPAQueryFactory queryFactory;
 
     public Page<TodoSummaryProjection> searchTodos(SearchTodoQuery query) {
+
         QTodo todo = QTodo.todo;
-        QManager managers = QManager.manager;
-        QComment comments = QComment.comment;
-        QUser managerInfo = QUser.user;
+        QComment comment = QComment.comment;
+        QManager manager = QManager.manager;
 
         BooleanExpression whereClause = Expressions.TRUE.and(titleLike(todo, query.title()))
                 .and(dateBetween(todo, query.startDate(), query.endDate()))
-                .and(managerNicknameLike(managerInfo, query.managerNickname()));
+                .and(managerNicknameLike(todo, query.managerNickname()));
 
         List<TodoSummaryProjection> result = queryFactory
                 .select(Projections.constructor(TodoSummaryProjection.class,
                         todo.id,
                         todo.title,
-                        managers.countDistinct(),
-                        comments.countDistinct()))
-                .from(todo).leftJoin(todo.managers, managers).leftJoin(todo.comments, comments)
-                .leftJoin(managers.user, managerInfo)
+                        JPAExpressions.select(manager.id.countDistinct())
+                            .from(manager)
+                            .where(manager.todo.eq(todo)),
+                        JPAExpressions.select(comment.id.countDistinct())
+                            .from(comment)
+                            .where(comment.todo.eq(todo))))
+                .from(todo)
                 .where(whereClause)
                 .groupBy(todo.id, todo.title)
                 .orderBy(todo.createdAt.desc())
@@ -53,8 +56,7 @@ public class SearchingRepository {
 
         JPAQuery<Long> countQuery = queryFactory
                 .select(todo.id.countDistinct())
-                .from(todo).leftJoin(todo.managers, managers).leftJoin(todo.comments, comments)
-                .leftJoin(managers.user, managerInfo)
+                .from(todo)
                 .where(whereClause);
 
         return PageableExecutionUtils.getPage(result, query.pageable(), countQuery::fetchOne);
@@ -67,11 +69,16 @@ public class SearchingRepository {
         return todo.title.like(asLikeString(title));
     }
 
-    private BooleanExpression managerNicknameLike(QUser managerInfo, String nickname) {
+    private BooleanExpression managerNicknameLike(QTodo todo, String nickname) {
+        QManager manager = QManager.manager;
+
         if (nickname == null || nickname.isBlank()) {
             return null;
         }
-        return managerInfo.nickname.like(asLikeString(nickname));
+        return queryFactory.selectFrom(manager)
+                .where(manager.todo.eq(todo)
+                        .and(manager.user.nickname.like(asLikeString(nickname))))
+                .exists();
     }
 
     private BooleanBuilder dateBetween(QTodo todo, LocalDate startDate, LocalDate endDate) {

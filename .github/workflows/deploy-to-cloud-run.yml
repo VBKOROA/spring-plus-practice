@@ -1,0 +1,58 @@
+name: Deploy Spring Boot App to Cloud Run
+
+on:
+  push:
+    branches:
+      - release
+
+env:
+  GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+  GCP_SERVICE_ACCOUNT: ${{ secrets.GCP_SERVICE_ACCOUNT }}
+  GCP_WORKLOAD_IDENTITY_PROVIDER: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+  
+  SERVICE_NAME: "spring-plus"
+  REGION: "northamerica-northeast1"
+  ARTIFACT_REGISTRY_BASE: "northamerica-northeast1-docker.pkg.dev/spring-plus/spring-plus"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Authenticate to Google Cloud
+        id: auth
+        uses: 'google-github-actions/auth@v2'
+        with:
+          workload_identity_provider: ${{ env.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ env.GCP_SERVICE_ACCOUNT }}
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Configure Docker for Artifact Registry
+        run: gcloud auth configure-docker northamerica-northeast1-docker.pkg.dev
+
+      - name: Build and Push Docker image
+        run: |
+          IMAGE_URI="${{ env.ARTIFACT_REGISTRY_BASE }}/${{ env.SERVICE_NAME }}:${{ github.sha }}"
+          gcloud builds submit --tag $IMAGE_URI
+
+      - name: Deploy to Cloud Run
+        run: |
+          IMAGE_URI="${{ env.ARTIFACT_REGISTRY_BASE }}/${{ env.SERVICE_NAME }}:${{ github.sha }}"
+          gcloud run deploy ${{ env.SERVICE_NAME }} \
+            --image $IMAGE_URI \
+            --region ${{ env.REGION }} \
+            --platform managed \
+            --allow-unauthenticated \
+            --set-env-vars="SPRING_PROFILES_ACTIVE=prod" \
+            --update-secrets="DB_URL=spring-plus-db-url:latest" \
+            --update-secrets="DB_USER=spring-plus-db-user:latest" \
+            --update-secrets="DB_PASS=spring-plus-db-password:latest" \
+            --update-secrets="JWT_SECRET=spring-plus-jwt-secret:latest"

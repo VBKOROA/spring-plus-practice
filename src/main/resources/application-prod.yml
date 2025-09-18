@@ -1,0 +1,45 @@
+# Production configuration for Spring Boot application
+spring:
+    datasource:
+        url: ${DB_URL}
+        username: ${DB_USER}
+        password: ${DB_PASS}
+        driver-class-name: com.mysql.cj.jdbc.Driver
+    jpa:
+        hibernate:
+            ddl-auto: update
+        show-sql: false
+        open-in-view: false
+    application:
+        name: spring-plus
+    servlet:
+        multipart:
+            enabled: true
+            max-file-size: 5MB
+            max-request-size: 5MB
+    cloud:
+        gcp:
+            storage:
+                project-id: spring-plus
+                bucket-name: abkoapi0004-spring-plus
+
+    autoconfigure:
+        exclude:
+            - io.awspring.cloud.autoconfigure.s3.S3AutoConfiguration
+
+server:
+    port: 8080
+
+management:
+    endpoints:
+        web:
+            exposure:
+                include: health
+
+jwt:
+    secret:
+        key: ${JWT_SECRET}
+
+profile:
+    upload:
+        max-size-mb: 5

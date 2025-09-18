@@ -31,7 +31,13 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'org.springframework.boot:spring-boot-starter-security'
+
+    // aws 
     implementation 'io.awspring.cloud:spring-cloud-aws-starter-s3'
+
+    // gcloud
+    implementation 'com.google.cloud:spring-cloud-gcp-starter-storage'
+
     testImplementation 'org.springframework.security:spring-security-test'
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'com.h2database:h2'
@@ -57,6 +63,7 @@ dependencies {
 dependencyManagement {
     imports {
         mavenBom "io.awspring.cloud:spring-cloud-aws-dependencies:3.4.0" // 최신 버전 확인 권장
+        mavenBom "com.google.cloud:spring-cloud-gcp-dependencies:7.3.1"
     }
 }
 

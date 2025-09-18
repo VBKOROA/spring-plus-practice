@@ -1,0 +1,22 @@
+meta {
+  name: 로그인
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/auth/signin
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "email": "abko@abko.com",
+    "password": "' or 1=1 --;'"
+  }
+}
+
+settings {
+  encodeUrl: true
+}

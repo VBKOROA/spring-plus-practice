@@ -18,18 +18,9 @@ import org.springframework.stereotype.Component;
 public class ManagerLoggingAspect {
     private final LogService logService;
 
-    @Before("execution(* org.example.expert.domain.manager.service.ManagerService.saveManager(..))")
-    public void beforeSaveManager(JoinPoint joinPoint) {
+    @Before("execution(* org.example.expert.domain.manager.service.ManagerService.saveManager(..)) && args(authUser, todoId, req)")
+    public void beforeSaveManager(JoinPoint joinPoint, AuthUser authUser, Long todoId, ManagerSaveRequest req) {
         try {
-            Object[] args = joinPoint.getArgs();
-            if (args == null || args.length < 3) {
-                return;
-            }
-
-            AuthUser authUser = (AuthUser) args[0];
-            Long todoId = (Long) args[1];
-            ManagerSaveRequest req = (ManagerSaveRequest) args[2];
-
             if (authUser == null || todoId == null || req == null) {
                 return;
             }

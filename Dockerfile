@@ -29,6 +29,6 @@ COPY --from=build /app/build/libs/ ./libs/
 EXPOSE 8080
 
 # 컨테이너가 시작될 때 애플리케이션 실행
-ENTRYPOINT ["java", "-jar", "/app/libs/*.jar"]
+ENTRYPOINT java -jar /app/libs/*.jar
 
 # 새로운 릴리즈를 위한 주석 ㅋㅋㅋ

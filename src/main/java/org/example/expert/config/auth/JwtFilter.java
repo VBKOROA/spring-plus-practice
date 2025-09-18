@@ -59,7 +59,7 @@ public class JwtFilter extends OncePerRequestFilter {
     }
 
     private Optional<String> getAuthorizationHeader(HttpServletRequest request) {
-        return Optional.ofNullable((String) request.getAttribute(HttpHeaders.AUTHORIZATION));
+        return Optional.ofNullable((String) request.getHeader(HttpHeaders.AUTHORIZATION));
     }
 
     private Optional<String> getBearerToken(@NonNull String authorizationHeader) {

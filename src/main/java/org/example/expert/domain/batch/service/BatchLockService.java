@@ -2,6 +2,7 @@ package org.example.expert.domain.batch.service;
 
 import org.example.expert.domain.batch.entity.BatchLock;
 import org.example.expert.domain.batch.repository.BatchLockRepository;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -9,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
+@Profile("batch")
 public class BatchLockService {
     private final BatchLockRepository batchLockRepository;
 

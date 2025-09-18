@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import org.example.expert.domain.user.enums.UserRole;
+import org.springframework.context.annotation.Profile;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -13,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 
 @Repository
 @RequiredArgsConstructor
+@Profile("batch")
 public class UserJdbcRepository {
     private final JdbcTemplate jdbcTemplate;
 

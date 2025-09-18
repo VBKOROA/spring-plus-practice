@@ -7,6 +7,7 @@ import java.util.UUID;
 
 import org.example.expert.domain.batch.repository.UserInsertQuery;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
+@Profile("batch")
 public class UserManyDummyInsertAsyncService {
 
     private final int dummyCount;

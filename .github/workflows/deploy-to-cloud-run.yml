@@ -52,8 +52,12 @@ jobs:
             --region ${{ env.REGION }} \
             --platform managed \
             --allow-unauthenticated \
+            --service-account="bucket-manager@spring-plus.iam.gserviceaccount.com" \
             --set-env-vars="SPRING_PROFILES_ACTIVE=prod" \
             --update-secrets="DB_URL=spring-plus-db-url:latest" \
             --update-secrets="DB_USER=spring-plus-db-user:latest" \
             --update-secrets="DB_PASS=spring-plus-db-password:latest" \
-            --update-secrets="JWT_SECRET=spring-plus-jwt-secret:latest"
+            --update-secrets="JWT_SECRET=spring-plus-jwt-secret:latest" \
+            --network "spring-plus" \
+            --subnet "spring-plus" \
+            --vpc-egress "private-ranges-only"

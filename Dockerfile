@@ -32,3 +32,5 @@ ENV SPRING_PROFILES_ACTIVE=prod
 
 # 컨테이너가 시작될 때 애플리케이션 실행
 ENTRYPOINT ["java", "-jar", "/app/app.jar"]
+
+# 새로운 릴리즈를 위한 주석 ㅋㅋㅋ

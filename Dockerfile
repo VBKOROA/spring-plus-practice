@@ -23,14 +23,12 @@ RUN apk --no-cache add openjdk17-jre
 # 애플리케이션을 실행할 작업 디렉토리 설정
 WORKDIR /app
 
-COPY --from=build /app/build/libs/*.jar app.jar
+COPY --from=build /app/build/libs/ ./libs/
 
 # 애플리케이션 실행 포트 노출 (선택 사항)
 EXPOSE 8080
 
-ENV SPRING_PROFILES_ACTIVE=prod
-
 # 컨테이너가 시작될 때 애플리케이션 실행
-ENTRYPOINT ["java", "-jar", "/app/app.jar"]
+ENTRYPOINT ["java", "-jar", "/app/libs/*.jar"]
 
 # 새로운 릴리즈를 위한 주석 ㅋㅋㅋ

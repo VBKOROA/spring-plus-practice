@@ -7,7 +7,8 @@ on:
 
 env:
   GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
-  GCP_SERVICE_ACCOUNT: ${{ secrets.GCP_SERVICE_ACCOUNT }}
+  GCP_BUILD_ACCOUNT: ${{ secrets.GCP_BUILD_ACCOUNT }}
+  GCP_DEPLOY_ACCOUNT: ${{ secrets.GCP_DEPLOY_ACCOUNT }}
   GCP_WORKLOAD_IDENTITY_PROVIDER: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
   
   SERVICE_NAME: "spring-plus"
@@ -30,7 +31,7 @@ jobs:
         uses: 'google-github-actions/auth@v3'
         with:
           workload_identity_provider: ${{ env.GCP_WORKLOAD_IDENTITY_PROVIDER }}
-          service_account: ${{ env.GCP_SERVICE_ACCOUNT }}
+          service_account: ${{ env.GCP_BUILD_ACCOUNT }}
           project_id: ${{ env.GCP_PROJECT_ID }}
 
       - name: Set up Cloud SDK
@@ -52,7 +53,7 @@ jobs:
             --region ${{ env.REGION }} \
             --platform managed \
             --allow-unauthenticated \
-            --service-account="bucket-manager@spring-plus.iam.gserviceaccount.com" \
+            --service-account=${{ env.GCP_DEPLOY_ACCOUNT }} \
             --set-env-vars="SPRING_PROFILES_ACTIVE=prod" \
             --update-secrets="DB_URL=spring-plus-db-url:latest" \
             --update-secrets="DB_USER=spring-plus-db-user:latest" \

@@ -1,7 +1,7 @@
 meta {
-  name: 회원가입2
+  name: 회원가입2 copy
   type: http
-  seq: 1
+  seq: 2
 }
 
 post {
@@ -18,7 +18,7 @@ body:multipart-form {
       "userRole": "USER",
       "nickname": "abko"
     }
-  '''
+  ''' @contentType(application/json)
   profile: @file(C:\Users\hex69\Downloads\157783368.png)
 }
 

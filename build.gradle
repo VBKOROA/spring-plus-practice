@@ -63,7 +63,8 @@ dependencies {
 dependencyManagement {
     imports {
         mavenBom "io.awspring.cloud:spring-cloud-aws-dependencies:3.4.0" // 최신 버전 확인 권장
-        mavenBom "com.google.cloud:spring-cloud-gcp-dependencies:7.3.1"
+        // SpringBoot 3.3.x 맞춤 버전
+        mavenBom "com.google.cloud:spring-cloud-gcp-dependencies:5.13.4"
     }
 }
 

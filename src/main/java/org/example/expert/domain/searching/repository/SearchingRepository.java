@@ -17,7 +17,6 @@ import org.springframework.util.StringUtils;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -57,9 +56,10 @@ public class SearchingRepository {
         QComment comment = QComment.comment;
         QManager manager = QManager.manager;
 
-        BooleanExpression whereClause = Expressions.TRUE.and(titleLike(todo, query.title()))
-                .and(dateBetween(todo, query.startDate(), query.endDate()))
-                .and(managerNicknameLike(todo, query.managerNickname()));
+        BooleanBuilder whereClause = new BooleanBuilder();
+        whereClause.and(titleLike(todo, query.title()));
+        whereClause.and(dateBetween(todo, query.startDate(), query.endDate()));
+        whereClause.and(managerNicknameLike(todo, query.managerNickname()));
 
         List<TodoSummaryProjection> result = queryFactory
                 .select(Projections.constructor(TodoSummaryProjection.class,

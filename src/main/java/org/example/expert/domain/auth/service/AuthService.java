@@ -11,6 +11,7 @@ import org.example.expert.domain.auth.exception.AuthException;
 import org.example.expert.domain.common.exception.InvalidRequestException;
 import org.example.expert.domain.store.service.ProfileStoreService;
 import org.example.expert.domain.user.entity.User;
+import org.example.expert.domain.user.entity.vo.UserPasswordVO;
 import org.example.expert.domain.user.enums.UserRole;
 import org.example.expert.domain.user.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -35,24 +36,22 @@ public class AuthService {
             throw new InvalidRequestException("이미 존재하는 이메일입니다.");
         }
 
-        String encodedPassword = passwordEncoder.encode(signupRequest.getPassword());
-
         UserRole userRole = UserRole.of(signupRequest.getUserRole());
-
         User newUser;
+        UserPasswordVO password = UserPasswordVO.fromRawString(signupRequest.getPassword(), passwordEncoder);
 
         if (profileFile == null || profileFile.isEmpty()) {
             newUser = new User(
                     signupRequest.getEmail(),
                     signupRequest.getNickname(),
-                    encodedPassword,
+                    password,
                     userRole);
         } else {
             String profileURL = profileStoreService.store(profileFile);
             newUser = new User(
                     signupRequest.getEmail(),
                     signupRequest.getNickname(),
-                    encodedPassword,
+                    password,
                     userRole,
                     profileURL);
         }
@@ -70,7 +69,7 @@ public class AuthService {
                 () -> new InvalidRequestException("가입되지 않은 유저입니다."));
 
         // 로그인 시 이메일과 비밀번호가 일치하지 않을 경우 401을 반환합니다.
-        if (!passwordEncoder.matches(signinRequest.getPassword(), user.getPassword())) {
+        if (!user.getPassword().matches(signinRequest.getPassword(), passwordEncoder)) {
             throw new AuthException("잘못된 비밀번호입니다.");
         }
 

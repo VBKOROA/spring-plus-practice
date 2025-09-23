@@ -3,9 +3,13 @@ package org.example.expert.domain.user.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
 import org.example.expert.domain.common.dto.AuthUser;
 import org.example.expert.domain.common.entity.Timestamped;
+import org.example.expert.domain.common.exception.InvalidRequestException;
+import org.example.expert.domain.user.entity.vo.UserPasswordVO;
 import org.example.expert.domain.user.enums.UserRole;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Getter
 @Entity
@@ -19,13 +23,14 @@ public class User extends Timestamped {
     private String email;
     @Column(nullable = false)
     private String nickname;
-    private String password;
+    @Embedded
+    private UserPasswordVO password;
     // 프로필 이미지 경로를 저장함
     private String profile;
     @Enumerated(EnumType.STRING)
     private UserRole userRole;
 
-    public User(String email, String nickname, String password, UserRole userRole) {
+    public User(String email, String nickname, UserPasswordVO password, UserRole userRole) {
         this.email = email;
         this.nickname = nickname;
         this.password = password;
@@ -33,7 +38,7 @@ public class User extends Timestamped {
         profile = null;
     }
 
-    public User(String email, String nickname, String password, UserRole userRole, String profile) {
+    public User(String email, String nickname, UserPasswordVO password, UserRole userRole, String profile) {
         this.email = email;
         this.nickname = nickname;
         this.password = password;
@@ -51,7 +56,17 @@ public class User extends Timestamped {
         return new User(authUser.getId(), authUser.getEmail(), authUser.getUserRole());
     }
 
-    public void changePassword(String password) {
+    public void changePassword(String newPassword, String oldPassword, PasswordEncoder passwordEncoder) {
+        UserPasswordVO password = UserPasswordVO.fromRawString(newPassword, passwordEncoder);
+        
+        if (passwordEncoder.matches(newPassword, this.getPassword().getValue())) {
+            throw new InvalidRequestException("새 비밀번호는 기존 비밀번호와 같을 수 없습니다.");
+        }
+
+        if (!passwordEncoder.matches(oldPassword, this.getPassword().getValue())) {
+            throw new InvalidRequestException("잘못된 비밀번호입니다.");
+        }
+
         this.password = password;
     }
 

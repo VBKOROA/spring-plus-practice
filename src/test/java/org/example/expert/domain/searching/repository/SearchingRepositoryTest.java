@@ -6,19 +6,24 @@ import org.example.expert.config.PersistenceConfig;
 import org.example.expert.domain.comment.entity.Comment;
 import org.example.expert.domain.todo.entity.Todo;
 import org.example.expert.domain.user.entity.User;
+import org.example.expert.domain.user.entity.vo.UserPasswordVO;
 import org.example.expert.domain.user.enums.UserRole;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.BDDMockito.given;
 
 @DataJpaTest
 @Import(PersistenceConfig.class)
@@ -26,6 +31,9 @@ class SearchingRepositoryTest {
 
     @Autowired
     private TestEntityManager entityManager;
+
+    @MockBean
+    private PasswordEncoder passwordEncoder;
 
     private SearchingRepository searchingRepository;
 
@@ -37,13 +45,15 @@ class SearchingRepositoryTest {
 
     @BeforeEach
     void setUp() {
+        given(passwordEncoder.encode(anyString())).willReturn("encoded-value");
+
         JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager.getEntityManager());
         searchingRepository = new SearchingRepository(queryFactory);
 
-        user1 = new User("user1@example.com", "john", "password1", UserRole.USER);
+        user1 = new User("user1@example.com", "john", UserPasswordVO.fromRawString("Password1234!", passwordEncoder), UserRole.USER);
         entityManager.persist(user1);
 
-        user2 = new User("user2@example.com", "mike", "password2", UserRole.USER);
+        user2 = new User("user2@example.com", "mike", UserPasswordVO.fromRawString("Password1234!", passwordEncoder), UserRole.USER);
         entityManager.persist(user2);
 
         todo1 = new Todo("Spring Boot Project", "Spring Boot project description", "Sunny", user1);
